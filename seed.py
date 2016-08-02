@@ -48,11 +48,9 @@ def load_movies():
     #Read u.item file and insert data
     for row in open("seed_data/u.item"):
         row = row.rstrip()
-        row = row.split('|')
-        #split unnecessary genre information from list
-        row = row[:5]
 
-        movie_id, title, released_at, video_release_date, imdb_url = row
+        #split unnecessary genre information from list row[:5]
+        movie_id, title, released_at, video_release_date, imdb_url = row.split('|')[:5]
 
         #check if title ends with a date in ' (YYYY)', if true then strip
         if title[-1] == ')':

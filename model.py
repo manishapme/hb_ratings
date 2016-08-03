@@ -78,6 +78,26 @@ def get_user_by_email(email):
     return user
 
 
+def get_user_by_email_and_password(email, password):
+    """Verify email and password match stored credentials."""
+
+    user = User.query.filter_by(email=email, password=password).first()
+
+    return user
+
+
+def add_user(email, password, age=None, zipcode=""):
+    """Add new user"""
+
+    user = User(email=email,
+                password=password,
+                age=age,
+                zipcode=zipcode)
+
+    db.session.add(user)   
+    db.session.commit()                   
+
+
 ##############################################################################
 # Helper functions
 

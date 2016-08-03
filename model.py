@@ -68,6 +68,15 @@ class Rating(db.Model):
         return s % (self.rating_id, self.movie_id, self.user_id, self.score)
 
 
+##############################################################################
+# Query functions
+
+def get_user_by_email(email):
+    """Show information about one user."""
+
+    user = User.query.filter_by(email=email).first()
+    return user
+
 
 ##############################################################################
 # Helper functions

@@ -27,8 +27,8 @@ class User(db.Model):
         """Provide helpful representation when printed."""
 
         return "<User user_id=%s email=%s>" % (self.user_id, self.email)
-
-
+        
+        
 # Put your Movie and Rating model classes here.
 class Movie(db.Model):
     """Information about individual movie"""
@@ -66,6 +66,17 @@ class Rating(db.Model):
 
         s = "<Rating rating_id=%s movie_id=%s user_id=%s score=%s>"
         return s % (self.rating_id, self.movie_id, self.user_id, self.score)
+
+
+def add_rating(user_id, movie_id, score):
+    rating = Rating(user_id=user_id,
+                         movie_id=movie_id,
+                         score=score)
+    # We need to add to the session or it won't ever be stored
+    db.session.add(rating)
+
+    # Once we're done, we should commit our work
+    db.session.commit()
 
 
 ##############################################################################

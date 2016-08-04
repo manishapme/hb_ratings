@@ -6,7 +6,7 @@ from flask import Flask, render_template, redirect, request, flash, session
 from flask_debugtoolbar import DebugToolbarExtension
 
 from model import (User, Rating, Movie, connect_to_db, db, get_user_by_email, add_user,
-                  get_user_by_email_and_password)
+                  get_user_by_email_and_password, add_rating)
 
 
 app = Flask(__name__)
@@ -47,9 +47,38 @@ def user_detail(user_id):
 def movie_list():
     """Show list of movies."""
 
+    #When using order_by(Classname.attribute) and .all() ALWAYS at the end
     movies = Movie.query.order_by(Movie.title).all()
     return render_template('movie_list.html', movies=movies)
 
+
+@app.route('/movies/<movie_id>')
+def movie_detail(movie_id):
+    """Show details for one movie."""
+
+    result = Movie.query.get(movie_id)
+    return render_template('movie_detail.html', movie=result)
+
+
+@app.route('/rating', methods=['POST'])
+def rating_set():
+    """Create or update rating for logged in user."""
+
+    user_id = session['user_id']
+    movie_id = request.form.get('movie_id')
+    score = request.form.get('rating')
+
+    result = Rating.query.filter_by(user_id=user_id, movie_id=movie_id).first()
+    if result:
+        #use UPDATE
+        print 'update a rating'
+    else:
+        print 'add an new rating'
+        add_rating(user_id, movie_id, score)
+
+    return "1"
+
+#User.query.filter_by(email=email, password=password).first()
 
 @app.route('/register', methods=['GET', 'POST'])
 def register_user():

@@ -4,7 +4,7 @@
     <title>Ratings</title>
 </head>
 <body>
-    <button><a href="/logout">Logout</a></button>
+    {% if session['user_id'] is defined %}<button><a href="/logout">Logout</a></button>{% endif %}
     {% for message in get_flashed_messages() %}
         <p>{{ message }}</p>
     {% endfor %}

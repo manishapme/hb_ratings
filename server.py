@@ -34,6 +34,15 @@ def user_list():
     users = User.query.all()
     return render_template('user_list.html', users=users)
 
+
+@app.route('/users/<user_id>')
+def user_detail(user_id):
+    """Show details for one user."""
+
+    result = User.query.get(user_id)
+    return render_template('user_detail.html', user=result)
+  
+
 @app.route('/register', methods=['GET', 'POST'])
 def register_user():
     """Register or sign up user"""
@@ -71,7 +80,7 @@ def login_user():
         if result:
             flash('Hello %s, you are logged in' % user_email)
             session['user_id'] = result.user_id
-            return redirect('/')
+            return redirect('/users/%s' % result.user_id)
         else:
             flash('Error, %s and password did not match a registered user' % user_email)
             return redirect('/login')    

@@ -43,6 +43,14 @@ def user_detail(user_id):
     return render_template('user_detail.html', user=result)
   
 
+@app.route('/movies')
+def movie_list():
+    """Show list of movies."""
+
+    movies = Movie.query.order_by(Movie.title).all()
+    return render_template('movie_list.html', movies=movies)
+
+
 @app.route('/register', methods=['GET', 'POST'])
 def register_user():
     """Register or sign up user"""

@@ -68,14 +68,40 @@ class Rating(db.Model):
         return s % (self.rating_id, self.movie_id, self.user_id, self.score)
 
 
+##############################################################################
+# Add, update, delete functions
+
+def add_user(email, password, age=None, zipcode=""):
+    """Add new user"""
+
+    user = User(email=email,
+                password=password,
+                age=age,
+                zipcode=zipcode)
+
+    db.session.add(user)   
+    db.session.commit()   
+
+
+def update_rating(user_id, movie_id, score):
+    """Update existing rating"""
+
+     # alternate style of update. Note update({}) requires a dictionary be passed as argument
+     # rating = Rating.query.filter_by(user_id=user_id, movie_id=movie_id).update({'score': score})
+    rating = Rating.query.filter_by(user_id=user_id, movie_id=movie_id).first()
+    rating.score = score
+    db.session.commit()
+
+    return rating
+
+
 def add_rating(user_id, movie_id, score):
+    """Add a new rating"""
     rating = Rating(user_id=user_id,
                          movie_id=movie_id,
                          score=score)
-    # We need to add to the session or it won't ever be stored
-    db.session.add(rating)
 
-    # Once we're done, we should commit our work
+    db.session.add(rating)
     db.session.commit()
 
 
@@ -97,16 +123,7 @@ def get_user_by_email_and_password(email, password):
     return user
 
 
-def add_user(email, password, age=None, zipcode=""):
-    """Add new user"""
-
-    user = User(email=email,
-                password=password,
-                age=age,
-                zipcode=zipcode)
-
-    db.session.add(user)   
-    db.session.commit()                   
+              
 
 
 ##############################################################################

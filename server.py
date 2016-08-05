@@ -6,7 +6,7 @@ from flask import Flask, render_template, redirect, request, flash, session
 from flask_debugtoolbar import DebugToolbarExtension
 
 from model import (User, Rating, Movie, connect_to_db, db, get_user_by_email, add_user,
-                  get_user_by_email_and_password, add_rating)
+                  get_user_by_email_and_password, add_rating, update_rating)
 
 
 app = Flask(__name__)
@@ -70,13 +70,13 @@ def rating_set():
 
     result = Rating.query.filter_by(user_id=user_id, movie_id=movie_id).first()
     if result:
-        #use UPDATE
-        print 'update a rating'
+        flash('Your score of %s has been updated' % score)
+        update_rating(user_id, movie_id, score)
     else:
-        print 'add an new rating'
+        flash('Your score of %s has been added' % score)
         add_rating(user_id, movie_id, score)
 
-    return "1"
+    return redirect('/users/%s' % user_id)
 
 #User.query.filter_by(email=email, password=password).first()
 
